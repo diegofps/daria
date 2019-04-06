@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import DropDown from './dropdown';
 import logo from './logo.svg';
 import './App.css';
+
 
 class App extends Component {
 
@@ -27,21 +29,36 @@ class App extends Component {
     }
   }
 
+  constructor(props)
+  {
+    super(props)
+    this.state = {
+      data: this.data,
+      selected: undefined,
+    }
+  }
+
+  updateSelection(key, item)
+  {
+    console.log(key)
+    console.log(item)
+
+    this.setState({
+      selected: {
+        key: key,
+        item: item
+      }
+    })
+  }
 
   render() {
-
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
 
           <form>
-            <select>
-              <option>- pick a model -</option>
-              {Object.keys(this.data).map((key) => 
-                <option value='{key}' >{key} ({this.data[key].year})</option>
-              )}
-            </select>
+            <DropDown data={this.data} updateSelection={(a,b) => this.updateSelection(a,b)}/>
           </form>
 
         </header>
