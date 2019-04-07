@@ -8,21 +8,20 @@ export default class DropDown extends React.Component {
         this.state = {
             data: props.data,
             updateSelection: props.updateSelection,
-            myselect: React.createRef(),
         }
     }
 
-    updateSelection()
+    updateSelection = (evt) =>
     {
-        const key = this.state.myselect.current.value
+        const key = evt.target.value
         const item = this.state.data[key]
         this.state.updateSelection(key, item)
     }
 
-    render() 
+    render()
     {
         return (
-            <select ref={this.state.myselect} onChange={() => this.updateSelection()}>
+            <select onChange={this.updateSelection}>
                 <option> - pick up model - </option>
                 {Object.keys(this.state.data).map(key => 
                     <option key={key} value={key}> {key} ({this.state.data[key].year}) </option>

@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
-import DropDown from './dropdown';
+
+import ItemsListContainer from './ItemsListContainer';
+import DropDown from './DropDown';
 import logo from './logo.svg';
 import './App.css';
+
+import { connect } from 'react-redux';
+import { addItem } from "./actions/items";
 
 
 class App extends Component {
@@ -28,7 +33,7 @@ class App extends Component {
       origin: "USA"
     }
   }
-
+  
   constructor(props)
   {
     super(props)
@@ -37,18 +42,25 @@ class App extends Component {
       selected: undefined,
     }
   }
-
-  updateSelection(key, item)
+  
+  updateSelection = (key, item) =>
   {
-    console.log(key)
-    console.log(item)
-
     this.setState({
       selected: {
-        key: key,
-        item: item
+        name: key,
+        ...item
       }
     })
+  }
+
+  addItem = (evt) => 
+  {
+    evt.preventDefault()
+
+    if (this.state.selected)
+      this.props.addItem(this.state.selected)
+    else
+      console.log("Missing selected item");
   }
 
   render() {
@@ -58,8 +70,11 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
 
           <form>
-            <DropDown data={this.data} updateSelection={(a,b) => this.updateSelection(a,b)}/>
+            <DropDown data={this.data} updateSelection={this.updateSelection}/>
+            <input type="submit" onClick={this.addItem} value="Add" name="Add" />
           </form>
+
+          <ItemsListContainer />
 
         </header>
       </div>
@@ -67,4 +82,12 @@ class App extends Component {
   }
 }
 
-export default App;
+
+function mapDispatchToProps(dispatch) {
+  return {
+    addItem: item => dispatch(addItem(item))
+  };
+}
+
+//export default App
+export default connect(null, mapDispatchToProps)(App)
